@@ -1,0 +1,105 @@
+
+delete from system.schema_aggregates where keyspace_name='chris';
+delete from system.schema_functions where keyspace_name='chris';
+
+CREATE OR REPLACE FUNCTION state_groupbyandsum( state map<text, double>, datetime text, amount text )
+CALLED ON NULL INPUT
+RETURNS map<text, double>
+LANGUAGE java 
+AS 'String date = datetime.substring(0,10); Double count = (Double) state.get(date);  if (count == null) count = Double.parseDouble(amount); else count = count +  Double.parseDouble(amount); state.put(date, count); return state; ' ;
+
+CREATE OR REPLACE FUNCTION topFiveFinal ( state map<text, double> )
+CALLED ON NULL INPUT
+RETURNS map<text, double>
+LANGUAGE java AS 'java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy/MM/dd");
+java.util.Date[] arrayOfDates = new java.util.Date[state.size()];
+Integer index = 0, len;
+for( Object key : state.keySet()){
+	try {
+		arrayOfDates[index] = sdf.parse(key.toString());
+		index = index + 1;
+	} catch (java.text.ParseException e) {
+		e.printStackTrace();
+	}
+}
+java.util.Arrays.sort(arrayOfDates);
+if(state.size()>5){
+	for(index=0,len = arrayOfDates.length;index<len-5;index++)
+	{
+		state.remove(sdf.format(arrayOfDates[index]));
+	}
+}
+return state;';
+
+CREATE OR REPLACE AGGREGATE groupbyandsum(text, text) 
+SFUNC state_groupbyandsum 
+STYPE map<text, double> 
+FINALFUNC topFiveFinal
+INITCOND {};
+
+select groupbyandsum(timestamp, value) from warehouse;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+delete from system.schema_aggregates where keyspace_name='chris';
+delete from system.schema_functions where keyspace_name='chris';
+
+CREATE OR REPLACE FUNCTION state_groupbyandsum( state map<text, double>, datetime text, amount text )
+CALLED ON NULL INPUT
+RETURNS map<text, double>
+LANGUAGE java 
+AS 'String date = datetime.substring(0,10); Double count = (Double) state.get(date);  if (count == null) count = Double.parseDouble(amount); else count = count +  Double.parseDouble(amount); state.put(date, count); return state; ' ;
+
+CREATE OR REPLACE FUNCTION topFiveFinal ( state map<text, double> )
+CALLED ON NULL INPUT
+RETURNS map<text, double>
+LANGUAGE java AS 'java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("dd-MM-yyyy");
+java.util.Date[] arrayOfDates = new java.util.Date[state.size()];
+Integer index = 0;
+for( Object key : state.keySet()){
+	try {
+		arrayOfDates[index] = sdf.parse(key.toString());
+		index = index + 1;
+	} catch (java.text.ParseException e) {
+		e.printStackTrace();
+	}
+}
+java.util.Arrays.sort(arrayOfDates);
+if(state.size()>5){
+	for(index=arrayOfDates.length-1;index>=5;index--)
+	{
+		state.remove(sdf.format(arrayOfDates[index]));
+	}
+}
+return state;';
+
+CREATE OR REPLACE AGGREGATE groupbyandsum(text, text) 
+SFUNC state_groupbyandsum 
+STYPE map<text, double> 
+FINALFUNC topFiveFinal
+INITCOND {};
+
+
+
+
+
+
+
+
