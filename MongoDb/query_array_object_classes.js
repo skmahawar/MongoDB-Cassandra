@@ -1,0 +1,1 @@
+db.classes.find({ "reservations.user": ObjectId("55362de63f7e65e0108e8a5f") },{reservations: { $elemMatch:{ user: ObjectId("55362de63f7e65e0108e8a5f") }}})

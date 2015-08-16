@@ -1,0 +1,1 @@
+db.localities.insert({'locality_name' : 'Sector-56\, Gurgaon','city_name' : 'Delhi NCR'})

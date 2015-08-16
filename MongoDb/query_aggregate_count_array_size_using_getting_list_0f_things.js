@@ -1,0 +1,1 @@
+db.campaigns.find()

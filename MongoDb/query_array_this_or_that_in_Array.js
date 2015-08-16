@@ -1,0 +1,1 @@
+db.classes.find({ _id: ObjectId("553a48d00d9dcff0247491a7"), $or:[ {'reservations.isBooked' : true} , {'reservations.isCancelled': true} ],'reservations.user':ObjectId("55362de63f7e65e0108e8a5f") },{ 'reservations.user':ObjectId("55362de63f7e65e0108e8a5f")});

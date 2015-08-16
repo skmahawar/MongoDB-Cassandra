@@ -1,0 +1,1 @@
+db.studios.find({"classes.name": "BLAST FULL BODY"},{ classes:{ $elemMatch: {name:'BLAST FULL BODY'} } })

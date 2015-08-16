@@ -1,0 +1,1 @@
+db.classes.aggregate([{ $match:{ gender:'Female'}},{ $group:{ _id:'$city', total:{ $sum:'$inventory'}}}])

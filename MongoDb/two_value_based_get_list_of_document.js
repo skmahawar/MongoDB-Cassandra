@@ -1,0 +1,1 @@
+db.users.find({$or: [ { role: "publisher" }, { role: "advertiser" } ]})

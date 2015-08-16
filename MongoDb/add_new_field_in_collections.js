@@ -1,0 +1,1 @@
+db.packages.update({},{ $set:{ "deleted":false }})

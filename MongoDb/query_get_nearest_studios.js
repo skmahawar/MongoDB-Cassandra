@@ -1,0 +1,1 @@
+db.studios.find({location: { $near : [28.4776815,77.06214709999999]} })

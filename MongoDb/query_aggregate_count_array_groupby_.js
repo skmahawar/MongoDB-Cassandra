@@ -1,0 +1,1 @@
+db.campaigns.aggregate([{$match:{ user:ObjectId("5558ee440b60e9c01448e1ec"),status:'active'}},{$unwind:"$publishers"},{$project:{ _id:0, publishers:1, status:1 }},{ $group:{_id:"$publishers", count:{$sum:1}}}])
