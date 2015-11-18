@@ -1,0 +1,1 @@
+db.getCollection('posts').update({ _id: ObjectId("563e839ddc8891c65f226911"), "comments._id":ObjectId("563e8f91dc8891c65f226914") },{ $set:{ "comments.$.actualComment" : "i really loved when this happens" } })
